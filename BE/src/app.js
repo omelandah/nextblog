@@ -10,8 +10,8 @@ app.use(express.urlencoded());
 
 app.get('/', (req, res) => {
   res.send('Hello');
-})
+});
 
 app.listen(port, () => {
-  console.log(`Connected to port ${port}`)
-})
+  console.log(`Connected to port ${port}`);
+});
