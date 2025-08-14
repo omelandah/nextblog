@@ -2,13 +2,12 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const path = require('path');
+const routes = require('./routes/index');
 require('dotenv').config();
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const mongoose = require('mongoose');
-const Blog = require('./database/models/Blog');
 
-const uri =
-  'mongodb+srv://ntanh0393:Guitarway123@cluster0.kvtkt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const uri = process.env.DB_URI;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -23,19 +22,14 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(helmet());
-// app.use(cors);
+
+// enable cors
+app.use(cors());
+app.options('*', cors());
 
 app.use(express.urlencoded());
 
-app.get('/', (req, res) => {
-  res.send('Hello');
-});
-
-app.get('/blog', (req, res) => {
-  const blogA = new Blog({ title: 'Blog A' });
-  blogA.save();
-  res.send(blogA.title);
-});
+app.use('/api', routes);
 
 async function run() {
   try {
