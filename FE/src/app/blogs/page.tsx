@@ -42,6 +42,15 @@ const BlogList = () => {
         <p className="text-gray-600">Sharing my thoughts and experiences</p>
       </header>
 
+      <div className="flex justify-end mb-4">
+        <Link
+          href="/blogs/create"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Create New Blog
+        </Link>
+      </div>
+
       <section className="space-y-6">
         {mockPosts.map((post) => (
           <article
@@ -61,6 +70,14 @@ const BlogList = () => {
             >
               Read More →
             </Link>
+            <div className="mt-3 flex justify-end">
+              <Link
+                href={`/blogs/${post.id}/edit`}
+                className="text-blue-500 hover:underline text-sm"
+              >
+                Edit
+              </Link>
+            </div>
           </article>
         ))}
       </section>
