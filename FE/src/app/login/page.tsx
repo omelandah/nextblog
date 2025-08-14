@@ -1,5 +1,6 @@
 'use client';
 import { FormEvent } from 'react';
+import Link from 'next/link';
 
 interface SignInFormProps {
   username: string;
@@ -43,10 +44,17 @@ const Login = () => {
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
+          className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer w-full"
         >
           Sign In
         </button>
+
+        <p className="text-sm text-center text-gray-600">
+          Don't have an account?{' '}
+          <Link href="/register" className="text-blue-500 hover:underline">
+            Register here
+          </Link>
+        </p>
       </form>
     </div>
   );
