@@ -1,10 +1,10 @@
 const express = require('express');
-const blogRoute = require('./blog.route');
+const postRoute = require('./post.route');
 const userRoute = require('./user.route');
 
 const router = express.Router();
 
-router.use('/blog', blogRoute);
+router.use('/post', postRoute);
 
 router.use('/user', userRoute);
 
