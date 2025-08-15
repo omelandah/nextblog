@@ -4,21 +4,17 @@ import { Menu } from '@headlessui/react';
 import Image from 'next/image';
 import React from 'react';
 import Link from 'next/link';
+import { useAuthStore } from '@/store/useAuthStore';
 
 interface Props {
   children: React.ReactNode;
 }
 
-const mockUser = {
-  username: 'anhnt455',
-  avatarUrl: 'https://i.pravatar.cc/40?u=jeremy', // placeholder avatar
-  email: 'anhnt455@fpt.com',
-};
-
 export default function PostsLayout({ children }: Props) {
+  const { currentUser, clearUser } = useAuthStore();
+
   const handleSignOut = () => {
-    console.log('Sign out clicked');
-    // TODO: Implement your sign-out logic here
+    clearUser();
   };
 
   return (
@@ -41,7 +37,7 @@ export default function PostsLayout({ children }: Props) {
                 className="rounded-full"
               /> */}
               <span className="font-medium text-blue-600">
-                {mockUser.username}
+                {currentUser?.username}
               </span>
             </Menu.Button>
 
@@ -51,7 +47,7 @@ export default function PostsLayout({ children }: Props) {
                   <span
                     className={`w-full text-gray-300 text-left px-4 py-2 text-sm`}
                   >
-                    {mockUser.email}
+                    {currentUser?.email}
                   </span>
                 )}
               </Menu.Item>

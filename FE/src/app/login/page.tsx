@@ -1,6 +1,8 @@
 'use client';
 import { FormEvent } from 'react';
 import Link from 'next/link';
+import { loginUser } from '@/services/user';
+import { useAuthStore } from '@/store/useAuthStore';
 
 interface SignInFormProps {
   username: string;
@@ -8,12 +10,24 @@ interface SignInFormProps {
 }
 
 const Login = () => {
-  const handleSignIn = (event: FormEvent<HTMLFormElement>) => {
+  const { setCurrentUser } = useAuthStore();
+
+  const handleSignIn = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget); // e.target is the form element
-    const values = Object.fromEntries(formData.entries());
+    const values = Object.fromEntries(
+      formData.entries()
+    ) as unknown as SignInFormProps;
 
-    console.log(values);
+    const res = await loginUser(values);
+    if (res) {
+      setCurrentUser({
+        id: res.user._id,
+        username: res.user.username,
+        email: res.user.email,
+        isAdmin: res.user.isAdmin,
+      });
+    }
   };
 
   return (

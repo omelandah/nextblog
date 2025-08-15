@@ -26,7 +26,8 @@ app.use(helmet());
 app.use(cors());
 app.options('*', cors());
 
-app.use(express.urlencoded());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', routes);
 

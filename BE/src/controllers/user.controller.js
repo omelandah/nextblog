@@ -5,7 +5,7 @@ const register = async (req, res) => {
     const user = await userService.registerUser(req.body);
     res.status(201).json({ message: 'User created', user });
   } catch (err) {
-    err.status(400).json({ error: err.message });
+    res.status(400).json({ error: err.message });
   }
 };
 
@@ -14,7 +14,7 @@ const login = async (req, res) => {
     const user = await userService.loginUser(req.body);
     res.status(201).json({ message: 'Login succesfully', user });
   } catch (err) {
-    err.status(400).json({ error: err.message });
+    res.status(400).json({ error: err.message });
   }
 };
 
@@ -24,7 +24,7 @@ const getUserById = async (req, res) => {
     if (!user) return res.status(404).json({ error: 'User not found' });
     res.json(user);
   } catch (err) {
-    err.status(400).json({ error: err.message });
+    res.status(400).json({ error: err.message });
   }
 };
 

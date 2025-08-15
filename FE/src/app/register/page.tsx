@@ -1,20 +1,22 @@
 'use client';
 import Link from 'next/link';
 import { FormEvent } from 'react';
+import { RegisterFormProps, registerUser } from '@/services/user';
 
 const Register = () => {
   const handleRegister = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const values = Object.fromEntries(formData.entries());
+    const values = Object.fromEntries(
+      formData.entries()
+    ) as unknown as RegisterFormProps;
 
     // Optional: Password match check
     if (values.password !== values.confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
-
-    console.log(values);
+    registerUser(values);
   };
 
   return (
@@ -34,6 +36,15 @@ const Register = () => {
           type="text"
           name="username"
           placeholder="Enter username..."
+          className="border rounded px-3 py-2 w-full"
+        />
+
+        <label htmlFor="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          placeholder="Enter email..."
           className="border rounded px-3 py-2 w-full"
         />
 
