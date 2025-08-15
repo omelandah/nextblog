@@ -1,9 +1,21 @@
 const postService = require('../services/post.service');
+const moment = require('moment');
+const { TIME_FORMAT } = require('../constants/time');
 
 const getAllPosts = async (req, res) => {
   try {
     const posts = await postService.getAllPosts();
-    res.json(posts);
+    const mappedPosts = posts.map((post) => ({
+      id: post._id.toString(),
+      title: post.title,
+      body: post.body,
+      date: moment(post.createdAt).format(TIME_FORMAT),
+      author: {
+        id: post.author._id.toString(),
+        username: post.author.username,
+      },
+    }));
+    res.json({ data: mappedPosts });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -12,7 +24,17 @@ const getAllPosts = async (req, res) => {
 const getPostById = async (req, res) => {
   try {
     const post = postService.getPostById(req.params.id);
-    res.json(post);
+    const mappedPost = {
+      id: post._id.toString(),
+      title: post.title,
+      body: post.body,
+      date: moment(post.createdAt).format(TIME_FORMAT),
+      author: {
+        id: post.author._id.toString(),
+        username: post.author.username,
+      },
+    };
+    res.json({ data: mappedPost });
   } catch (err) {
     res.status(404).json({ message: err.message });
   }
