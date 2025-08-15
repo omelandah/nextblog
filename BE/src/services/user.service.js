@@ -1,5 +1,8 @@
 const userRepository = require('../repositories/user.repository');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'supersecret';
 
 const registerUser = async ({ username, password, email }) => {
   const existingUser = await userRepository.findByUsername(username);
@@ -8,11 +11,12 @@ const registerUser = async ({ username, password, email }) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  return await userRepository.createUser({
+  const newUser = await userRepository.createUser({
     username,
     password: hashedPassword,
     email,
   });
+  return { id: newUser._id, ...newUser };
 };
 
 const loginUser = async ({ username, password }) => {
@@ -26,7 +30,28 @@ const loginUser = async ({ username, password }) => {
     throw new Error('Invalid username or password');
   }
 
-  return user;
+  const token = jwt.sign(
+    {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    },
+    JWT_SECRET,
+    {
+      expiresIn: '1d',
+    }
+  );
+
+  return {
+    token,
+    user: {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    },
+  };
 };
 
 const getUserById = async (id) => {

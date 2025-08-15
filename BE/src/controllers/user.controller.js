@@ -3,7 +3,7 @@ const userService = require('../services/user.service');
 const register = async (req, res) => {
   try {
     const user = await userService.registerUser(req.body);
-    res.status(201).json({ message: 'User created', user });
+    res.status(201).json({ message: 'User created', data: user });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -12,7 +12,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const user = await userService.loginUser(req.body);
-    res.status(201).json({ message: 'Login succesfully', user });
+    res.status(201).json({ message: 'Login succesfully', data: user });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

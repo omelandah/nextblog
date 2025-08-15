@@ -3,6 +3,7 @@ import { FormEvent } from 'react';
 import Link from 'next/link';
 import { loginUser } from '@/services/user';
 import { useAuthStore } from '@/store/useAuthStore';
+import { saveToken } from '@/utils/authToken';
 
 interface SignInFormProps {
   username: string;
@@ -20,13 +21,16 @@ const Login = () => {
     ) as unknown as SignInFormProps;
 
     const res = await loginUser(values);
+    console.log('🚀 ~ handleSignIn ~ res:', res.data);
     if (res) {
       setCurrentUser({
-        id: res.user._id,
-        username: res.user.username,
-        email: res.user.email,
-        isAdmin: res.user.isAdmin,
+        id: res.data.user.id,
+        username: res.data.user.username,
+        email: res.data.user.email,
+        isAdmin: res.data.user.isAdmin,
       });
+
+      saveToken(res.data.token);
     }
   };
 

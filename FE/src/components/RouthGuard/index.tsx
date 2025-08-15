@@ -14,6 +14,7 @@ export default function RouteGuard({
   const router = useRouter();
   const pathname = usePathname();
   const currentUser = useAuthStore((state) => state.currentUser);
+  console.log('🚀 ~ RouteGuard ~ currentUser:', currentUser);
 
   useEffect(() => {
     const isPublic = publicRoutes.includes(pathname);

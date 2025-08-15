@@ -5,6 +5,7 @@ import Image from 'next/image';
 import React from 'react';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/useAuthStore';
+import { removeToken } from '@/utils/authToken';
 
 interface Props {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ export default function PostsLayout({ children }: Props) {
 
   const handleSignOut = () => {
     clearUser();
+    removeToken();
   };
 
   return (
