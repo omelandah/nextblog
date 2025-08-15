@@ -23,7 +23,7 @@ const getAllPosts = async (req, res) => {
 
 const getPostById = async (req, res) => {
   try {
-    const post = postService.getPostById(req.params.id);
+    const post = await postService.getPostById(req.params.id);
     const mappedPost = {
       id: post._id.toString(),
       title: post.title,
@@ -51,7 +51,7 @@ const createPost = async (req, res) => {
 
 const updatePost = async (req, res) => {
   try {
-    const updatedPost = postService.updatePost(
+    const updatedPost = await postService.updatePost(
       req.params.id,
       req.body,
       req.user

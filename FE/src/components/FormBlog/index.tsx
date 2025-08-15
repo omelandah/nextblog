@@ -1,5 +1,6 @@
 'use client';
 
+import { FormBlog } from '@/services/blog';
 import { useState } from 'react';
 
 interface BlogFormProps {
@@ -7,7 +8,7 @@ interface BlogFormProps {
     title: string;
     body: string;
   };
-  onSubmit: (values: { title: string; body: string }) => void;
+  onSubmit: (values: FormBlog) => void;
   submitLabel?: string;
 }
 

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { findUserById } = require('../repositories/user.repository');
+const userService = require('../services/user.service');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecret';
 
@@ -15,7 +15,19 @@ const authenticate = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = await findUserById(decoded.id).select('-password');
+    console.log('🚀 ~ authenticate ~ decoded:', decoded.id);
+    const user = await userService.getUserById(decoded.id);
+    if (!user) {
+      return res.status(401).json({ message: 'User not found' });
+    }
+
+    req.user = {
+      id: user._id.toString(),
+      username: user.username,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    };
+
     next();
   } catch (error) {
     res.status(401).json({ message: 'Not authorized, token failed' });

@@ -1,15 +1,19 @@
 'use client';
 
 import BlogForm from '@/components/FormBlog/index';
+import { createPost, FormBlog } from '@/services/blog';
 import { useRouter } from 'next/navigation';
 
 export default function CreatePostPage() {
   const router = useRouter();
 
-  const handleCreate = (values: { title: string; body: string }) => {
+  const handleCreate = async (values: FormBlog) => {
     console.log('Creating post:', values);
     // TODO: Call API to create post
-    router.push('/'); // redirect to home after creation
+    const res = await createPost(values);
+    if (res) {
+      router.push('/blogs');
+    }
   };
 
   return (

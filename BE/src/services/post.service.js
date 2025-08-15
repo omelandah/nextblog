@@ -18,7 +18,7 @@ const createPost = async (postData, userId) => {
 };
 
 const updatePost = async (id, postData, user) => {
-  const post = postRepository.findById(id);
+  const post = await postRepository.findById(id);
   if (!post) {
     throw new Error('Post not found');
   }
@@ -30,8 +30,8 @@ const updatePost = async (id, postData, user) => {
   return await postRepository.update(id, postData);
 };
 
-const deletePost = async (id, postData, user) => {
-  const post = postRepository.findById(id);
+const deletePost = async (id, user) => {
+  const post = await postRepository.findById(id);
   if (!post) {
     throw new Error('Post not found');
   }

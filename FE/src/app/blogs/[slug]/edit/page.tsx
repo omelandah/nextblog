@@ -3,27 +3,35 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import BlogForm from '@/components/FormBlog/index';
+import { FormBlog, getPostById, updatePost } from '@/services/blog';
+import { BlogPost } from '@/models/blog';
 
 export default function EditPostPage() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const router = useRouter();
-  const [initialData, setInitialData] = useState<{
-    title: string;
-    body: string;
-  } | null>(null);
+  const [initialData, setInitialData] = useState<FormBlog | null>(null);
+
+  const fetchPostById = async () => {
+    const data = await getPostById(slug as string);
+    setInitialData({
+      title: data.title,
+      body: data.body,
+    });
+  };
 
   useEffect(() => {
-    // TODO: Fetch post by id
-    setInitialData({
-      title: 'Sample Post Title',
-      body: 'Sample post content here...',
-    });
-  }, [id]);
+    if (slug) {
+      fetchPostById();
+    }
+  }, [slug]);
 
-  const handleUpdate = (values: { title: string; body: string }) => {
-    console.log('Updating post:', id, values);
-    // TODO: Call API to update post
-    router.push(`/posts/${id}`);
+  const handleUpdate = async (values: FormBlog) => {
+    console.log('🚀 ~ handleUpdate ~ values:', values);
+    const res = await updatePost(slug as string, values);
+
+    if (res) {
+      router.push(`/blogs/${slug}`);
+    }
   };
 
   if (!initialData) return <p className="text-center py-6">Loading...</p>;
