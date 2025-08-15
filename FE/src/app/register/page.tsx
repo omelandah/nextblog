@@ -2,9 +2,10 @@
 import Link from 'next/link';
 import { FormEvent } from 'react';
 import { RegisterFormProps, registerUser } from '@/services/user';
+import { redirect } from 'next/navigation';
 
 const Register = () => {
-  const handleRegister = (event: FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const values = Object.fromEntries(
@@ -16,7 +17,11 @@ const Register = () => {
       alert('Passwords do not match!');
       return;
     }
-    registerUser(values);
+    const res = await registerUser(values);
+
+    if (res) {
+      redirect('/login');
+    }
   };
 
   return (

@@ -21,7 +21,7 @@ const Login = () => {
     ) as unknown as SignInFormProps;
 
     const res = await loginUser(values);
-    console.log('🚀 ~ handleSignIn ~ res:', res.data);
+
     if (res) {
       setCurrentUser({
         id: res.data.user.id,
