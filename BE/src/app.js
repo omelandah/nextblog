@@ -19,7 +19,6 @@ const client = new MongoClient(uri, {
 });
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 app.use(helmet());
 
@@ -54,6 +53,7 @@ async function main() {
   // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
 }
 
-app.listen(port, () => {
-  console.log(`Connected to port ${port}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Connected to port ${PORT}`);
 });
