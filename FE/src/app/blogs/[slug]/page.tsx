@@ -1,24 +1,16 @@
-'use client';
-
+import { getAxiosServer } from '@/lib/axiosServer';
 import { BlogPost } from '@/models/blog';
 import { getPostById } from '@/services/blog';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
-const BlogDetail = () => {
-  const { slug } = useParams();
-  const [currentPost, setCurrentPost] = useState<BlogPost | null>(null);
+interface BlogDetailProps {
+  params: Promise<{ slug: string }>;
+}
 
-  const fetchPostById = async () => {
-    const data = await getPostById(slug as string);
-
-    setCurrentPost(data);
-  };
-
-  useEffect(() => {
-    fetchPostById();
-  }, [slug]);
+const BlogDetail = async ({ params }: BlogDetailProps) => {
+  const { slug } = await params;
+  const axios = await getAxiosServer();
+  const currentPost = await getPostById(axios, slug as string);
 
   if (!currentPost) {
     return (
@@ -38,9 +30,11 @@ const BlogDetail = () => {
       </header>
 
       <article className="prose prose-lg max-w-none">
-        {currentPost.body.split('\n\n').map((paragraph, idx) => (
-          <p key={idx}>{paragraph}</p>
-        ))}
+        {currentPost.body
+          .split('\n\n')
+          .map((paragraph: string, idx: number) => (
+            <p key={idx}>{paragraph}</p>
+          ))}
       </article>
 
       <div className="mt-8">

@@ -1,14 +1,9 @@
-'use client';
-
-import { FormBlog } from '@/services/blog';
-import { useState } from 'react';
-
 interface BlogFormProps {
   initialValues?: {
     title: string;
     body: string;
   };
-  onSubmit: (values: FormBlog) => void;
+  onSubmit: (formData: FormData) => Promise<void>;
   submitLabel?: string;
 }
 
@@ -17,25 +12,9 @@ export default function BlogForm({
   onSubmit,
   submitLabel = 'Save',
 }: BlogFormProps) {
-  const [formData, setFormData] = useState(initialValues);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
-
   return (
     <form
-      onSubmit={handleSubmit}
+      action={onSubmit}
       className="space-y-4 border rounded px-6 py-6 shadow"
     >
       <h2 className="text-2xl font-semibold">
@@ -51,8 +30,7 @@ export default function BlogForm({
           id="title"
           name="title"
           type="text"
-          value={formData.title}
-          onChange={handleChange}
+          defaultValue={initialValues.title}
           placeholder="Enter post title..."
           className="border rounded px-3 py-2 w-full"
         />
@@ -66,8 +44,7 @@ export default function BlogForm({
         <textarea
           id="body"
           name="body"
-          value={formData.body}
-          onChange={handleChange}
+          defaultValue={initialValues.body}
           placeholder="Write your post..."
           rows={5}
           className="border rounded px-3 py-2 w-full"

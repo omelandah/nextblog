@@ -1,40 +1,69 @@
-import axiosInstance from '@/utils/axiosInstance';
+import { AxiosInstance } from 'axios';
 
 export interface FormBlog {
   title: string;
   body: string;
 }
 
-export async function getAllPosts() {
-  const res = await axiosInstance.get('/post');
+export async function getAllPosts(axios: AxiosInstance) {
+  try {
+    const res = await axios.get('/post');
 
-  return res.data || [];
+    return res.data.data || [];
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 }
 
-export async function getPostById(id: string) {
-  const res = await axiosInstance.get(`/post/${id}`);
+export async function getPostById(axios: AxiosInstance, id: string) {
+  try {
+    const res = await axios.get(`/post/${id}`);
 
-  return res.data || {};
+    return res.data.data || {};
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 }
 
-export async function createPost(values: FormBlog) {
-  const res = await axiosInstance.post(`/post`, {
-    ...values,
-  });
+export async function createPost(axios: AxiosInstance, values: FormBlog) {
+  try {
+    const res = await axios.post(`/post`, {
+      ...values,
+    });
 
-  return res;
+    return res;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 }
 
-export async function updatePost(id: string, values: FormBlog) {
-  const res = await axiosInstance.put(`/post/${id}`, {
-    ...values,
-  });
+export async function updatePost(
+  axios: AxiosInstance,
+  id: string,
+  values: FormBlog
+) {
+  try {
+    const res = await axios.put(`/post/${id}`, {
+      ...values,
+    });
 
-  return res;
+    return res;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 }
 
-export async function deletePost(id: string) {
-  const res = await axiosInstance.delete(`/post/${id}`);
+export async function deletePost(axios: AxiosInstance, id: string) {
+  try {
+    const res = await axios.delete(`/post/${id}`);
 
-  return res;
+    return res;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 }

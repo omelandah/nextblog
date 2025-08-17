@@ -1,36 +1,32 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import BlogForm from '@/components/FormBlog/index';
-import { FormBlog, getPostById, updatePost } from '@/services/blog';
-import { BlogPost } from '@/models/blog';
+import { getPostById, updatePost } from '@/services/blog';
+import { getAxiosServer } from '@/lib/axiosServer';
 
-export default function EditPostPage() {
-  const { slug } = useParams();
-  const router = useRouter();
-  const [initialData, setInitialData] = useState<FormBlog | null>(null);
+interface EditPostPageProps {
+  params: Promise<{ slug: string }>;
+}
 
-  const fetchPostById = async () => {
-    const data = await getPostById(slug as string);
-    setInitialData({
-      title: data.title,
-      body: data.body,
-    });
+export default async function EditPostPage({ params }: EditPostPageProps) {
+  const { slug } = await params;
+  const axios = await getAxiosServer();
+  const data = await getPostById(axios, slug as string);
+  const initialData = {
+    title: data.title,
+    body: data.body,
   };
 
-  useEffect(() => {
-    if (slug) {
-      fetchPostById();
-    }
-  }, [slug]);
+  const handleUpdate = async (formData: FormData) => {
+    'use server';
+    const axios = await getAxiosServer();
 
-  const handleUpdate = async (values: FormBlog) => {
-    console.log('🚀 ~ handleUpdate ~ values:', values);
-    const res = await updatePost(slug as string, values);
+    const title = formData.get('title') as string;
+    const body = formData.get('body') as string;
+
+    const res = await updatePost(axios, slug as string, { title, body });
 
     if (res) {
-      router.push(`/blogs/${slug}`);
+      redirect(`/blogs/${slug}`);
     }
   };
 

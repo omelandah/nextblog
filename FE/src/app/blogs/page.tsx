@@ -1,31 +1,25 @@
-'use client';
-
 import { BlogPost } from '@/models/blog';
-import { deletePost, getAllPosts } from '@/services/blog';
+import { getAllPosts, deletePost } from '@/services/blog';
 import { useAuthStore } from '@/store/useAuthStore';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { revalidatePath } from 'next/cache';
+import { getServerAuthUser } from '@/lib/auth';
+import { getAxiosServer } from '@/lib/axiosServer';
 
-const BlogList = () => {
-  const { currentUser } = useAuthStore();
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+// ✅ Server Action for deleting
+async function handleDeletePost(id: string) {
+  'use server';
 
-  const fetchPosts = async () => {
-    const data = await getAllPosts();
-    setPosts(data || []);
-  };
+  const axios = await getAxiosServer();
+  await deletePost(axios, id);
+  revalidatePath('/blogs');
+}
 
-  const handleDeletePost = async (id: string) => {
-    const res = await deletePost(id);
-
-    if (res) {
-      fetchPosts();
-    }
-  };
-
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+const BlogList = async () => {
+  // ✅ fetch posts directly on the server
+  const axios = await getAxiosServer();
+  const posts: BlogPost[] = (await getAllPosts(axios)) || [];
+  const currentUser = await getServerAuthUser(); // replace with your server-side auth check
 
   const checkEditable = (post: BlogPost) => {
     return post.author.id === currentUser?.id || currentUser?.isAdmin;
@@ -66,6 +60,7 @@ const BlogList = () => {
             >
               Read More →
             </Link>
+
             {checkEditable(post) && (
               <div className="mt-3 flex items-center justify-end">
                 <Link
@@ -75,12 +70,14 @@ const BlogList = () => {
                   Edit
                 </Link>
 
-                <div
-                  className="text-red-500 ml-4 cursor-pointer hover:underline"
-                  onClick={() => handleDeletePost(post.id)}
-                >
-                  Delete
-                </div>
+                <form action={handleDeletePost.bind(null, post.id)}>
+                  <button
+                    type="submit"
+                    className="text-red-500 ml-4 cursor-pointer hover:underline text-sm"
+                  >
+                    Delete
+                  </button>
+                </form>
               </div>
             )}
           </article>

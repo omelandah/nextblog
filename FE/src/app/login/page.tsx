@@ -1,44 +1,35 @@
-'use client';
-import { FormEvent } from 'react';
 import Link from 'next/link';
 import { loginUser } from '@/services/user';
-import { useAuthStore } from '@/store/useAuthStore';
 import { saveToken } from '@/utils/authToken';
+import { redirect } from 'next/navigation';
+import { getAxiosServer } from '@/lib/axiosServer';
 
-interface SignInFormProps {
-  username: string;
-  password: string;
+async function handleSignIn(formData: FormData) {
+  'use server';
+
+  const username = formData.get('username') as string;
+  const password = formData.get('password') as string;
+
+  const axios = await getAxiosServer();
+
+  const { data }: any = await loginUser(axios, { username, password });
+
+  if (data) {
+    // Save token in cookie instead of localStorage
+    await saveToken(data.data.token);
+
+    // redirect after login
+    redirect('/');
+  }
+
+  // optionally return error state
 }
 
 const Login = () => {
-  const { setCurrentUser } = useAuthStore();
-
-  const handleSignIn = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget); // e.target is the form element
-    const values = Object.fromEntries(
-      formData.entries()
-    ) as unknown as SignInFormProps;
-
-    const res = await loginUser(values);
-
-    if (res) {
-      setCurrentUser({
-        id: res.data.user.id,
-        username: res.data.user.username,
-        email: res.data.user.email,
-        isAdmin: res.data.user.isAdmin,
-      });
-
-      saveToken(res.data.token);
-    }
-  };
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <form
-        method="POST"
-        onSubmit={handleSignIn}
+        action={handleSignIn}
         className="space-y-4 border rounded px-9 py-8"
       >
         <p className="text-3xl font-semibold text-center">Next Blog</p>

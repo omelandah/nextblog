@@ -1,23 +1,30 @@
-'use client';
 import Link from 'next/link';
-import { FormEvent } from 'react';
-import { RegisterFormProps, registerUser } from '@/services/user';
+import { registerUser } from '@/services/user';
 import { redirect } from 'next/navigation';
+import { getAxiosServer } from '@/lib/axiosServer';
 
-const Register = () => {
-  const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const values = Object.fromEntries(
-      formData.entries()
-    ) as unknown as RegisterFormProps;
+const Register = async () => {
+  const handleRegister = async (formData: FormData) => {
+    'use server';
+
+    const username = formData.get('username') as string;
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    const confirmPassword = formData.get('confirmPassword') as string;
 
     // Optional: Password match check
-    if (values.password !== values.confirmPassword) {
+    if (password !== confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
-    const res = await registerUser(values);
+
+    const axios = await getAxiosServer();
+    const res = await registerUser(axios, {
+      username,
+      email,
+      password,
+      confirmPassword,
+    });
 
     if (res) {
       redirect('/login');
@@ -27,8 +34,7 @@ const Register = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <form
-        method="POST"
-        onSubmit={handleRegister}
+        action={handleRegister}
         className="space-y-4 border rounded px-9 py-8 shadow"
       >
         <p className="text-3xl font-semibold text-center">

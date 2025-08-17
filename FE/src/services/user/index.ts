@@ -1,4 +1,4 @@
-import axiosInstance from '@/utils/axiosInstance';
+import { AxiosInstance, AxiosResponse } from 'axios';
 
 export interface LoginFormProps {
   username: string;
@@ -12,9 +12,12 @@ export interface RegisterFormProps {
   confirmPassword: string;
 }
 
-export const registerUser = async (values: RegisterFormProps) => {
+export const registerUser = async (
+  axios: AxiosInstance,
+  values: RegisterFormProps
+) => {
   try {
-    return await axiosInstance.post('/user/register', {
+    return await axios.post('/user/register', {
       username: values.username,
       password: values.password,
       email: values.email,
@@ -24,9 +27,12 @@ export const registerUser = async (values: RegisterFormProps) => {
   }
 };
 
-export const loginUser = async (values: LoginFormProps) => {
+export const loginUser = async (
+  axios: AxiosInstance,
+  values: LoginFormProps
+) => {
   try {
-    return await axiosInstance.post('/user/login', {
+    return await axios.post('/user/login', {
       ...values,
     });
   } catch (err) {

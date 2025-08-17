@@ -1,23 +1,23 @@
-'use client';
-
-import { Menu } from '@headlessui/react';
-import Image from 'next/image';
-import React from 'react';
+// app/posts/layout.tsx (Server Component)
 import Link from 'next/link';
-import { useAuthStore } from '@/store/useAuthStore';
-import { removeToken } from '@/utils/authToken';
+import { removeToken } from '@/utils/authToken'; // server helper
+import { getServerAuthUser } from '@/lib/auth'; // decode user from token (server util)
+import { redirect } from 'next/navigation';
 
 interface Props {
   children: React.ReactNode;
 }
 
-export default function PostsLayout({ children }: Props) {
-  const { currentUser, clearUser } = useAuthStore();
+async function handleSignOut() {
+  'use server';
 
-  const handleSignOut = () => {
-    clearUser();
-    removeToken();
-  };
+  await removeToken(); // clear cookie
+  redirect('/login');
+}
+
+export default async function PostsLayout({ children }: Props) {
+  // 🔑 Get token from cookies (server side)
+  const currentUser = await getServerAuthUser();
 
   return (
     <div className="h-screen flex flex-col overflow-auto">
@@ -30,43 +30,26 @@ export default function PostsLayout({ children }: Props) {
           </div>
 
           {/* User menu */}
-          <Menu as="div" className="relative">
-            <Menu.Button className="flex items-center gap-2 focus:outline-none">
-              {/* <Image
-                alt="Avatar"
-                width={32}
-                height={32}
-                className="rounded-full"
-              /> */}
-              <span className="font-medium text-blue-600">
-                {currentUser?.username}
-              </span>
-            </Menu.Button>
-
-            <Menu.Items className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg focus:outline-none">
-              <Menu.Item disabled>
-                {() => (
-                  <span
-                    className={`w-full text-gray-300 text-left px-4 py-2 text-sm`}
-                  >
-                    {currentUser?.email}
-                  </span>
-                )}
-              </Menu.Item>
-              <Menu.Item>
-                {({ active }: { active: boolean }) => (
+          {currentUser && (
+            <details className="relative">
+              <summary className="text-blue-500 cursor-pointer flex items-center gap-2">
+                {currentUser.username}
+              </summary>
+              <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg">
+                <div className="w-full text-gray-300 text-left px-4 py-2 text-sm">
+                  {currentUser.email}
+                </div>
+                <form action={handleSignOut}>
                   <button
-                    onClick={handleSignOut}
-                    className={`w-full text-gray-600 text-left px-4 py-2 text-sm ${
-                      active ? 'bg-gray-100 text-black' : ''
-                    }`}
+                    type="submit"
+                    className="w-full text-gray-600 text-left px-4 py-2 text-sm hover:bg-gray-100 hover:text-black cursor-pointer"
                   >
                     Sign out
                   </button>
-                )}
-              </Menu.Item>
-            </Menu.Items>
-          </Menu>
+                </form>
+              </div>
+            </details>
+          )}
         </div>
       </header>
 
