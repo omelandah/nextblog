@@ -14,16 +14,27 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
   const initialData = {
     title: data.title,
     body: data.body,
+    coverImage: data.coverImage,
   };
 
   const handleUpdate = async (formData: FormData) => {
     'use server';
     const axios = await getAxiosServer();
 
+    const fd = new FormData();
+
     const title = formData.get('title') as string;
     const body = formData.get('body') as string;
+    const coverImage = formData.get('coverImage') as File | null;
 
-    const res = await updatePost(axios, slug as string, { title, body });
+    fd.append('title', title);
+    fd.append('body', body);
+
+    if (coverImage && coverImage.size > 0 && coverImage.name !== 'undefined') {
+      fd.append('coverImage', coverImage);
+    }
+
+    const res = await updatePost(axios, slug as string, fd);
 
     if (res) {
       redirect(`/blogs/${slug}`);

@@ -27,6 +27,10 @@ const updatePost = async (id, postData, user) => {
     throw new Error('Not authorized to update this post');
   }
 
+  // if (post.coverImage && !postData.coverImage) {
+  //   postData.coverImage = post.coverImage;
+  // }
+
   return await postRepository.update(id, postData);
 };
 

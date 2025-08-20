@@ -7,11 +7,20 @@ export default function CreatePostPage() {
   const handleCreate = async (formData: FormData) => {
     'use server';
     // TODO: Call API to create post
+    const axios = await getAxiosServer();
+
+    const fd = new FormData();
     const title = formData.get('title') as string;
     const body = formData.get('body') as string;
+    const coverImage = formData.get('coverImage') as File | null;
 
-    const axios = await getAxiosServer();
-    const res = await createPost(axios, { title, body });
+    fd.append('title', title);
+    fd.append('body', body);
+
+    if (coverImage && coverImage.size > 0 && coverImage.name !== 'undefined') {
+      fd.append('coverImage', coverImage);
+    }
+    const res = await createPost(axios, fd);
     if (res) {
       redirect('/blogs');
     }

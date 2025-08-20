@@ -22,6 +22,16 @@ const BlogDetail = async ({ params }: BlogDetailProps) => {
 
   return (
     <main className="max-w-3xl mx-auto px-4 py-8">
+      {currentPost.coverImage && (
+        <div className="mb-3">
+          <img
+            src={currentPost.coverImage}
+            alt="Cover Image"
+            className="w-full object-cover rounded border"
+          />
+        </div>
+      )}
+
       <header className="mb-6">
         <h1 className="text-4xl font-bold mb-2">{currentPost.title}</h1>
         <p className="text-gray-500 text-sm">

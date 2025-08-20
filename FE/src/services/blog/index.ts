@@ -3,6 +3,7 @@ import { AxiosInstance } from 'axios';
 export interface FormBlog {
   title: string;
   body: string;
+  coverImage?: File;
 }
 
 export async function getAllPosts(axios: AxiosInstance) {
@@ -27,10 +28,10 @@ export async function getPostById(axios: AxiosInstance, id: string) {
   }
 }
 
-export async function createPost(axios: AxiosInstance, values: FormBlog) {
+export async function createPost(axios: AxiosInstance, formData: FormData) {
   try {
-    const res = await axios.post(`/post`, {
-      ...values,
+    const res = await axios.post(`/post`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
 
     return res;
@@ -43,11 +44,11 @@ export async function createPost(axios: AxiosInstance, values: FormBlog) {
 export async function updatePost(
   axios: AxiosInstance,
   id: string,
-  values: FormBlog
+  formData: FormData
 ) {
   try {
-    const res = await axios.put(`/post/${id}`, {
-      ...values,
+    const res = await axios.put(`/post/${id}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
 
     return res;

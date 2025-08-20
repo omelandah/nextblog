@@ -10,6 +10,7 @@ const getAllPosts = async (req, res) => {
       title: post.title,
       body: post.body,
       date: moment(post.createdAt).format(TIME_FORMAT),
+      coverImage: post.coverImage,
       author: {
         id: post.author._id.toString(),
         username: post.author.username,
@@ -29,6 +30,7 @@ const getPostById = async (req, res) => {
       title: post.title,
       body: post.body,
       date: moment(post.createdAt).format(TIME_FORMAT),
+      coverImage: post.coverImage,
       author: {
         id: post.author._id.toString(),
         username: post.author.username,
@@ -42,7 +44,13 @@ const getPostById = async (req, res) => {
 
 const createPost = async (req, res) => {
   try {
-    const post = await postService.createPost(req.body, req.user.id);
+    const { title, body } = req.body;
+    const coverImage = req.file ? `/uploads/${req.file.filename}` : null;
+
+    const post = await postService.createPost(
+      { title, body, coverImage },
+      req.user.id
+    );
     res.status(201).json(post);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -51,9 +59,11 @@ const createPost = async (req, res) => {
 
 const updatePost = async (req, res) => {
   try {
+    const { title, body } = req.body;
+    const coverImage = req.file ? `/uploads/${req.file.filename}` : undefined;
     const updatedPost = await postService.updatePost(
       req.params.id,
-      req.body,
+      { title, body, coverImage },
       req.user
     );
     res.json(updatedPost);

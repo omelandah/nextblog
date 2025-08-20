@@ -1,14 +1,17 @@
+import ImageUpload from '../ImageUpload';
+
 interface BlogFormProps {
   initialValues?: {
     title: string;
     body: string;
+    coverImage?: string;
   };
   onSubmit: (formData: FormData) => Promise<void>;
   submitLabel?: string;
 }
 
 export default function BlogForm({
-  initialValues = { title: '', body: '' },
+  initialValues = { title: '', body: '', coverImage: '' },
   onSubmit,
   submitLabel = 'Save',
 }: BlogFormProps) {
@@ -16,10 +19,14 @@ export default function BlogForm({
     <form
       action={onSubmit}
       className="space-y-4 border rounded px-6 py-6 shadow"
+      // encType="multipart/form-data"
     >
       <h2 className="text-2xl font-semibold">
         {submitLabel === 'Create' ? 'Create New Post' : 'Edit Post'}
       </h2>
+
+      {/* Cover Image */}
+      <ImageUpload initialUrl={initialValues.coverImage} />
 
       {/* Title */}
       <div>
