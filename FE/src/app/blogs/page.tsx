@@ -1,6 +1,5 @@
 import { BlogPost } from '@/models/blog';
 import { getAllPosts, deletePost } from '@/services/blog';
-import { useAuthStore } from '@/store/useAuthStore';
 import Link from 'next/link';
 import { revalidatePath } from 'next/cache';
 import { getServerAuthUser } from '@/lib/auth';

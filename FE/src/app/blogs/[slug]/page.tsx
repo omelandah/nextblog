@@ -1,6 +1,7 @@
 import { getAxiosServer } from '@/lib/axiosServer';
 import { BlogPost } from '@/models/blog';
 import { getPostById } from '@/services/blog';
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface BlogDetailProps {
@@ -24,7 +25,7 @@ const BlogDetail = async ({ params }: BlogDetailProps) => {
     <main className="max-w-3xl mx-auto px-4 py-8">
       {currentPost.coverImage && (
         <div className="mb-3">
-          <img
+          <Image
             src={currentPost.coverImage}
             alt="Cover Image"
             className="w-full object-cover rounded border"

@@ -6,6 +6,8 @@ services:
     volumes:
       - ./BE:/app
       - /app/node_modules
+    env_file:
+      - ./.env
     environment:
       - MONGODB_URI=${MONGODB_URI}
       - PORT=3000
