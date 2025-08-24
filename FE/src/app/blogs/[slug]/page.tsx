@@ -37,6 +37,8 @@ const BlogDetail = async ({ params }: BlogDetailProps) => {
             src={currentPost.coverImage}
             alt="Cover Image"
             className="w-full object-cover rounded border"
+            width={100}
+            height={100}
           />
         </div>
       )}

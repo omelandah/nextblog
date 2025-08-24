@@ -45,7 +45,7 @@ const getPostById = async (req, res) => {
 const createPost = async (req, res) => {
   try {
     const { title, body } = req.body;
-    const coverImage = req.file ? `/uploads/${req.file.filename}` : null;
+    const coverImage = req.file ? req.file.location : null;
 
     const post = await postService.createPost(
       { title, body, coverImage },
@@ -60,7 +60,7 @@ const createPost = async (req, res) => {
 const updatePost = async (req, res) => {
   try {
     const { title, body } = req.body;
-    const coverImage = req.file ? `/uploads/${req.file.filename}` : undefined;
+    const coverImage = req.file ? req.file.location : undefined;
     const updatedPost = await postService.updatePost(
       req.params.id,
       { title, body, coverImage },

@@ -2,13 +2,14 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
-  async rewrites() {
-    return [
+  images: {
+    remotePatterns: [
       {
-        source: '/uploads/:path*',
-        destination: 'http://localhost:3000/uploads/:path*', // proxy to BE
+        protocol: 'https',
+        hostname: '*.s3.ap-southeast-2.amazonaws.com',
+        pathname: '/**',
       },
-    ];
+    ],
   },
 };
 

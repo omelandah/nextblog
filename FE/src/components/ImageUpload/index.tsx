@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useState, ChangeEvent } from 'react';
 
 interface ImageUploadProps {
@@ -37,10 +38,12 @@ export default function ImageUpload({ initialUrl, label }: ImageUploadProps) {
 
       {preview && (
         <div className="mt-3">
-          <img
+          <Image
             src={preview}
             alt="Cover preview"
             className="w-full object-cover rounded border"
+            width={100}
+            height={100}
           />
         </div>
       )}
