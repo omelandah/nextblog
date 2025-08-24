@@ -12,7 +12,11 @@ async function handleSignIn(formData: FormData) {
 
   const axios = await getAxiosServer();
 
-  const { data }: any = await loginUser(axios, { username, password });
+  const response = await loginUser(axios, {
+    username,
+    password,
+  });
+  const data = response?.data;
 
   if (data) {
     // Save token in cookie instead of localStorage
@@ -59,7 +63,7 @@ const Login = () => {
         </button>
 
         <p className="text-sm text-center text-gray-600">
-          Don't have an account?{' '}
+          Not have an account?{' '}
           <Link href="/register" className="text-blue-500 hover:underline">
             Register here
           </Link>

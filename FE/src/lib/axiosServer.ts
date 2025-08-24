@@ -1,7 +1,7 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { cookies } from 'next/headers';
 
-export async function getAxiosServer() {
+export async function getAxiosServer(): Promise<AxiosInstance> {
   const cookieStore = await cookies();
   const token = cookieStore.get('accessToken')?.value;
 
