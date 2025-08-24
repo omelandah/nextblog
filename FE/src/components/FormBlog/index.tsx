@@ -1,3 +1,5 @@
+import { getTranslation } from '@/lib/getTranslation';
+import { headers } from 'next/headers';
 import ImageUpload from '../ImageUpload';
 
 interface BlogFormProps {
@@ -8,12 +10,14 @@ interface BlogFormProps {
   };
   onSubmit: (formData: FormData) => Promise<void>;
   submitLabel?: string;
+  translation: (key: string) => string;
 }
 
 export default function BlogForm({
   initialValues = { title: '', body: '', coverImage: '' },
   onSubmit,
   submitLabel = 'Save',
+  translation,
 }: BlogFormProps) {
   return (
     <form
@@ -22,23 +26,28 @@ export default function BlogForm({
       // encType="multipart/form-data"
     >
       <h2 className="text-2xl font-semibold">
-        {submitLabel === 'Create' ? 'Create New Post' : 'Edit Post'}
+        {submitLabel === 'Create'
+          ? translation('blog.create.title')
+          : translation('blog.edit.title')}
       </h2>
 
       {/* Cover Image */}
-      <ImageUpload initialUrl={initialValues.coverImage} />
+      <ImageUpload
+        initialUrl={initialValues.coverImage}
+        label={translation('blog.form.coverImage')}
+      />
 
       {/* Title */}
       <div>
         <label className="block font-medium mb-1" htmlFor="title">
-          Title
+          {translation('blog.form.title')}
         </label>
         <input
           id="title"
           name="title"
           type="text"
           defaultValue={initialValues.title}
-          placeholder="Enter post title..."
+          placeholder={translation('blog.form.title.placeholder')}
           className="border rounded px-3 py-2 w-full"
         />
       </div>
@@ -46,13 +55,13 @@ export default function BlogForm({
       {/* Body */}
       <div>
         <label className="block font-medium mb-1" htmlFor="body">
-          Body
+          {translation('blog.form.body')}
         </label>
         <textarea
           id="body"
           name="body"
           defaultValue={initialValues.body}
-          placeholder="Write your post..."
+          placeholder={translation('blog.form.body.placeholder')}
           rows={5}
           className="border rounded px-3 py-2 w-full"
         />
@@ -63,7 +72,9 @@ export default function BlogForm({
         type="submit"
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
       >
-        {submitLabel}
+        {submitLabel === 'Create'
+          ? translation('button.create')
+          : translation('button.update')}
       </button>
     </form>
   );

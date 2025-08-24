@@ -2,12 +2,19 @@ import { redirect } from 'next/navigation';
 import BlogForm from '@/components/FormBlog/index';
 import { getPostById, updatePost } from '@/services/blog';
 import { getAxiosServer } from '@/lib/axiosServer';
+import { t } from 'i18next';
+import { headers } from 'next/headers';
+import { getTranslation } from '@/lib/getTranslation';
 
 interface EditPostPageProps {
   params: Promise<{ slug: string }>;
 }
 
 export default async function EditPostPage({ params }: EditPostPageProps) {
+  const header = await headers();
+  const locale = header.get('x-locale') || 'en';
+  const { t } = await getTranslation(locale, 'common');
+
   const { slug } = await params;
   const axios = await getAxiosServer();
   const data = await getPostById(axios, slug as string);
@@ -41,7 +48,8 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
     }
   };
 
-  if (!initialData) return <p className="text-center py-6">Loading...</p>;
+  if (!initialData)
+    return <p className="text-center py-6">{t('global.loading')}...</p>;
 
   return (
     <div className="max-w-3xl mx-auto py-6">
@@ -49,6 +57,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
         initialValues={initialData}
         onSubmit={handleUpdate}
         submitLabel="Update"
+        translation={t}
       />
     </div>
   );

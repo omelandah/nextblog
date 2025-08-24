@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { removeToken } from '@/utils/authToken'; // server helper
 import { getServerAuthUser } from '@/lib/auth'; // decode user from token (server util)
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
+import { getTranslation } from '@/lib/getTranslation';
 
 interface Props {
   children: React.ReactNode;
@@ -16,6 +18,10 @@ async function handleSignOut() {
 }
 
 export default async function PostsLayout({ children }: Props) {
+  const header = await headers();
+  const locale = header.get('x-locale') || 'en';
+  const { t } = await getTranslation(locale, 'common');
+
   // 🔑 Get token from cookies (server side)
   const currentUser = await getServerAuthUser();
 
@@ -44,7 +50,7 @@ export default async function PostsLayout({ children }: Props) {
                     type="submit"
                     className="w-full text-gray-600 text-left px-4 py-2 text-sm hover:bg-gray-100 hover:text-black cursor-pointer"
                   >
-                    Sign out
+                    {t('global.signout')}
                   </button>
                 </form>
               </div>

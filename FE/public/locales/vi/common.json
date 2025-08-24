@@ -1,0 +1,40 @@
+{
+  "global.signin": "Đăng nhập",
+  "global.signout": "Đăng xuất",
+  "global.username": "Tên đăng nhập",
+  "global.password": "Mật khẩu",
+  "global.confirmPassword": "Xác minh mật khẩu",
+  "global.email": "Email",
+  "global.loading": "Đang tải",
+
+  "button.register": "Đăng ký",
+  "button.signin": "Đăng nhập",
+  "button.create": "Tạo mới",
+  "button.update": "Cập nhật",
+
+  "input.placeholder.enter": "Nhập",
+
+  "login.registerHere": "Đăng ký tại đây",
+  "login.register.question": "Chưa có tài khoản ?",
+
+  "register.title": "Tạo tài khoản",
+  "register.account.question": "Đã có tài khoản ?",
+  "register.loginHere": "Đăng nhập tại đây",
+
+  "blog.home.title": "Blog của tôi",
+  "blog.home.description": "Nơi chia sẻ những suy nghĩ và trải nghiệm của tôi",
+  "blog.button.create": "Tạo blog mới",
+  "blog.button.edit": "Sửa",
+  "blog.button.delete": "Xóa",
+  "blog.card.by": "bởi",
+  "blog.card.readMore": "Đọc thêm",
+  "blog.detail.back": "Trở về trang chủ",
+  "blog.detail.notFound": "Không tìm thấy bài viết",
+  "blog.create.title": "Tạo bài viết mới",
+  "blog.edit.title": "Chỉnh sửa bài viết",
+  "blog.form.title": "Tiêu đề",
+  "blog.form.title.placeholder": "Nhập tiêu đề bài viết...",
+  "blog.form.body": "Nội dung",
+  "blog.form.body.placeholder": "Viết nội dung bài viết của bạn...",
+  "blog.form.coverImage": "Ảnh bìa"
+}

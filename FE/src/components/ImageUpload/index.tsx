@@ -1,7 +1,12 @@
 'use client';
 import { useState, ChangeEvent } from 'react';
 
-export default function ImageUpload({ initialUrl }: { initialUrl?: string }) {
+interface ImageUploadProps {
+  initialUrl?: string;
+  label: string;
+}
+
+export default function ImageUpload({ initialUrl, label }: ImageUploadProps) {
   const [preview, setPreview] = useState<string | null>(initialUrl || null);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -14,7 +19,7 @@ export default function ImageUpload({ initialUrl }: { initialUrl?: string }) {
   return (
     <div>
       <label className="block font-medium mb-1" htmlFor="coverImage">
-        Cover Image
+        {label}
       </label>
       <input
         id="coverImage"

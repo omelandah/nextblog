@@ -1,6 +1,8 @@
 import { getAxiosServer } from '@/lib/axiosServer';
+import { getTranslation } from '@/lib/getTranslation';
 import { BlogPost } from '@/models/blog';
 import { getPostById } from '@/services/blog';
+import { headers } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -9,6 +11,10 @@ interface BlogDetailProps {
 }
 
 const BlogDetail = async ({ params }: BlogDetailProps) => {
+  const header = await headers();
+  const locale = header.get('x-locale') || 'en';
+  const { t } = await getTranslation(locale, 'common');
+
   const { slug } = await params;
   const axios = await getAxiosServer();
   const currentPost = await getPostById(axios, slug as string);
@@ -16,7 +22,9 @@ const BlogDetail = async ({ params }: BlogDetailProps) => {
   if (!currentPost) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-8 text-center">
-        <h1 className="text-2xl font-bold text-red-500">Post not found</h1>
+        <h1 className="text-2xl font-bold text-red-500">
+          {t('blog.detail.notFound')}
+        </h1>
       </div>
     );
   }
@@ -36,7 +44,7 @@ const BlogDetail = async ({ params }: BlogDetailProps) => {
       <header className="mb-6">
         <h1 className="text-4xl font-bold mb-2">{currentPost.title}</h1>
         <p className="text-gray-500 text-sm">
-          {currentPost.date} by {currentPost.author?.username}
+          {currentPost.date} {t('blog.card.by')} {currentPost.author?.username}
         </p>
       </header>
 
@@ -50,7 +58,7 @@ const BlogDetail = async ({ params }: BlogDetailProps) => {
 
       <div className="mt-8">
         <Link href="/" className="text-blue-500 hover:underline font-medium">
-          ← Back to Home
+          ← {t('blog.detail.back')}
         </Link>
       </div>
     </main>

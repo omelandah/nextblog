@@ -3,6 +3,8 @@ import { loginUser } from '@/services/user';
 import { saveToken } from '@/utils/authToken';
 import { redirect } from 'next/navigation';
 import { getAxiosServer } from '@/lib/axiosServer';
+import { headers } from 'next/headers';
+import { getTranslation } from '@/lib/getTranslation';
 
 async function handleSignIn(formData: FormData) {
   'use server';
@@ -29,7 +31,11 @@ async function handleSignIn(formData: FormData) {
   // optionally return error state
 }
 
-const Login = () => {
+const Login = async () => {
+  const header = await headers();
+  const locale = header.get('x-locale') || 'en';
+  const { t } = await getTranslation(locale, 'common');
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <form
@@ -38,34 +44,34 @@ const Login = () => {
       >
         <p className="text-3xl font-semibold text-center">Next Blog</p>
         <br />
-        <label htmlFor="username">Username</label>
+        <label htmlFor="username">{t('global.username')}</label>
         <input
           id="username"
           type="text"
           name="username"
-          placeholder="Enter username..."
+          placeholder={`${t('input.placeholder.enter')} ${t('global.username').toLowerCase()}...`}
           className="border rounded px-3 py-2 w-full"
         />
 
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">{t('global.password')}</label>
         <input
           id="password"
           type="password"
           name="password"
-          placeholder="Enter password..."
+          placeholder={`${t('input.placeholder.enter')} ${t('global.password').toLowerCase()}...`}
           className="border rounded px-3 py-2 w-full"
         />
         <button
           type="submit"
           className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer w-full"
         >
-          Sign In
+          {t('button.signin')}
         </button>
 
         <p className="text-sm text-center text-gray-600">
-          Not have an account?{' '}
+          {t('login.register.question')}{' '}
           <Link href="/register" className="text-blue-500 hover:underline">
-            Register here
+            {t('login.registerHere')}
           </Link>
         </p>
       </form>

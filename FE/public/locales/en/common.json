@@ -1,0 +1,40 @@
+{
+  "global.signin": "Sign in",
+  "global.signout": "Sign out",
+  "global.username": "Username",
+  "global.password": "Password",
+  "global.confirmPassword": "Confirm Password",
+  "global.email": "Email",
+  "global.loading": "Loading",
+
+  "button.register": "Register",
+  "button.signin": "Sign in",
+  "button.create": "Create",
+  "button.update": "Update",
+
+  "input.placeholder.enter": "Enter",
+
+  "login.registerHere": "Register here",
+  "login.register.question": "Don't have an account ?",
+
+  "register.title": "Create an account here",
+  "register.account.question": "Already have an account ?",
+  "register.loginHere": "Login here",
+
+  "blog.home.title": "My Blog",
+  "blog.home.description": "Sharing my thoughts and experiences",
+  "blog.button.create": "Create New Blog",
+  "blog.button.edit": "Edit",
+  "blog.button.delete": "Delete",
+  "blog.card.by": "by",
+  "blog.card.readMore": "Read more",
+  "blog.detail.back": "Back to home",
+  "blog.detail.notFound": "Post not found",
+  "blog.create.title": "Create New Post",
+  "blog.edit.title": "Edit Post",
+  "blog.form.title": "Title",
+  "blog.form.title.placeholder": "Enter post title...",
+  "blog.form.body": "Body",
+  "blog.form.body.placeholder": "Write your post...",
+  "blog.form.coverImage": "Cover image"
+}
